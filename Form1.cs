@@ -66,11 +66,101 @@ namespace Biblioteca
                 btnAcoes.Text = "Atualizar Lista";
                 btnAjuste.Text = "Cadastrar";
             }
+            else
+            {
+                AtualizarLista();
+            }
         }
 
-        private void Livros_Load(object sender, EventArgs e)
+        private void btnAjuste_Click(object sender, EventArgs e)
         {
+            if (btnAjuste.Text == "Cadastrar")
+            {
+                string titulo = txtTitulo.Text;
+                string autor = txtAutor.Text;
+                string genero = txtGenero.Text;
+                string editora = txtEditora.Text;
+                string isbn = txtISBN.Text;
+                try
+                {
+                    int quantidade = int.Parse(txtQuantidade.Text);
+                    LivrosTableAdapter livros = new LivrosTableAdapter();
+                    livros.Insert(titulo, genero, autor, editora, isbn, quantidade);
+                    AtualizarLista();
+                    limparElementos();
+                } catch
+                {
+                    MessageBox.Show("Erro de código");
+                }
+            }
+            else
+            {
+                if (lboLivros.SelectedItem == null)
+                {
+                    lboLivros.ClearSelected();
+                    AtualizarLista();
+                    limparElementos();
+                    return;
+                }
+                LivrosRow livro = lboLivros.SelectedItem as LivrosRow;
+                if (livro == null) return;
+                string titulo = txtTitulo.Text;
+                string autor = txtAutor.Text;
+                string genero = txtGenero.Text;
+                string editora = txtEditora.Text;
+                string isbn = txtISBN.Text;
+                try
+                {
+                    int quantidade = int.Parse(txtQuantidade.Text);
+                    LivrosTableAdapter livros = new LivrosTableAdapter();
+                    livros.Update(livro.LivroID, titulo, genero, autor, editora, isbn, quantidade);
+                    AtualizarLista();
+                    limparElementos();
 
+                    btnAcoes.Text = "Atualizar Lista";
+                    btnAjuste.Text = "Cadastrar";
+                }
+                catch
+                {
+                    MessageBox.Show("Erro de código");
+                }
+            }
+        }
+
+        private void btnLimpar_Click(object sender, EventArgs e)
+        {
+            lboLivros.ClearSelected();
+            AtualizarLista();
+            limparElementos();
+            btnAcoes.Text = "Atualizar Lista";
+            btnAjuste.Text = "Cadastrar";
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            TextBox pesquisa = sender as TextBox;
+            if (pesquisa.Text == "")
+            {
+                AtualizarLista();
+                return;
+            }
+            lboLivros.ClearSelected();
+            lboLivros.Items.Clear();
+            string textoDigitado = txtPesquisa.Text;
+            LivrosTableAdapter dados = new LivrosTableAdapter();
+            var livros = from linha in dados.GetData()
+                         where linha.Titulo.ToLower()
+                                .Contains(textoDigitado.ToLower())
+                         select linha;
+            foreach(var livro in livros) lboLivros.Items.Add(livro);
+        }
+
+        private void btnUsuario_Click(object sender, EventArgs e)
+        {
+            Usuario usuario = new Usuario();
+            usuario.Show();
+            //hide - Como tratar
+            Hide();
         }
     }
 }
