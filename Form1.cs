@@ -12,9 +12,9 @@ using static Biblioteca.BibliotecaDBDataSet;
 
 namespace Biblioteca
 {
-    public partial class Livros : Form
+    public partial class Form1 : Form
     {
-        public Livros()
+        public Form1()
         {
             InitializeComponent();
             AtualizarLista();
@@ -157,10 +157,10 @@ namespace Biblioteca
 
         private void btnUsuario_Click(object sender, EventArgs e)
         {
-            Usuario usuario = new Usuario();
-            usuario.Show();
-            //hide - Como tratar
             Hide();
+            Usuario usuario = new Usuario(this);
+            usuario.Show();
+
         }
     }
 }

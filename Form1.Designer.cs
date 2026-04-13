@@ -1,6 +1,6 @@
 ﻿namespace Biblioteca
 {
-    partial class Livros
+    partial class Form1
     {
         /// <summary>
         /// Variável de designer necessária.
